@@ -254,5 +254,5 @@ Else
 	Loop
 	success = False
 	
-	MsgBox "Email sent successfully.", vbInformation + vbOKOnly, "VBMail"
+	MsgBox "Email sent successfully.", vbInformation + vbOKOnly, "DMail (VBScript)"
 End If
