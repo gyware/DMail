@@ -13,6 +13,6 @@ A simple way to send email without an SMTP server.
 * Written in 2 languages and counting
 
 ## Setup
-Navigate to the directory for the programming language you want DMail in, then simply download it.<br><br>Also, any executables are portable and are compressed inside a Win32 self-extracting cabinet.
+Navigate to the directory for the programming language you want DMail in, then simply download it.<br><br>Also, any executables are portable and are compressed inside a self-extracting cabinet.
 
 *Easy to use, easy to understand.*
