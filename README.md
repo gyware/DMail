@@ -12,8 +12,9 @@ A simple way to send email without an SMTP server.
 * Send email without an SMTP server
 * Uses **no** 3rd party APIs
 * Optionally specify a custom SMTP server to use
+* Written in 2 languages and counting
 
 ## Setup
-Just download, extract and run VBMail-setup.exe to install.
+Navigate to the directory for the language you want DMail in, then download extract and run the desired release.
 
 *Easy to use, easy to understand.*
