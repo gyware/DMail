@@ -13,6 +13,6 @@ A simple way to send email without an SMTP server.
 * Written in 2 languages and counting
 
 ## Setup
-Navigate to the directory for the programming language you want DMail in, then simply download it.
+Navigate to the directory for the programming language you want DMail in, then simply download it, and, if necessary, extract it.
 
 *Easy to use, easy to understand.*
