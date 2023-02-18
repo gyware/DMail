@@ -1,7 +1,7 @@
 # DMail
 
 [![AppVeyor](https://img.shields.io/badge/Licence-MIT-orange)](LICENSE)
-[![AppVeyor](https://img.shields.io/badge/Version-v0.1-informational)](https://github.com/gyware/VBMail)
+[![AppVeyor](https://img.shields.io/badge/Version-v0.1-informational)](https://github.com/gyware/DMail)
 ![AppVeyor](https://img.shields.io/badge/Development-In_Progress-lightgreen)
 
 A simple way to send email without an SMTP server.
