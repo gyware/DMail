@@ -7,7 +7,7 @@
 A simple way to send email without an SMTP server.
 
 ## For Users
-If you are just a regular windows user who wants to use DMail, it is recommended you download or run the [DMail HTA GUI](/HTA/DMail-GUI.hta). You can run other GUI's, but the HTA GUI is the most complete.
+If you are just a regular windows user who wants to use DMail, it is recommended you download or run the [DMail HTA GUI](/HTA/GUI/DMail-GUI.hta). You can run other GUI's, but the HTA GUI is the most complete.
 
 ## For Advanced Users
 For advanced users, the CLI is recommended (VB.NET or VBScript are the most complete right now).
