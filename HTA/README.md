@@ -1,1 +1,1 @@
-# DMail (HTA)
+# DMail (HTML Application)
