@@ -22,6 +22,10 @@ For developers, we recommend the DMail functions as they can be integrated direc
 * Written in 4 languages and counting
 
 ## Setup
-Navigate to the directory for the programming language you want DMail in, then simply download it, extract if necessary and run.
+### For regular and advanced users
+Navigate to the directory for the programming language you want DMail in, then simply download the GUI or CLI, extract if necessary and run.
+
+### For developers
+Navigate to the directory for the programming language you want DMail in, then simply download the function file, add it somewhere in your code and call it whenever you want to use it.
 
 *Easy to use, easy to understand.*
