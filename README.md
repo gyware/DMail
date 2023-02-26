@@ -12,7 +12,7 @@ If you are just a regular Windows user who wants to use DMail, it is recommended
 For advanced users, the CLI is recommended (VB.NET or VBScript are the most complete right now).
 
 ## For Developers
-For developers, we recommend the DMail functions as they can be integrated directly into your app with small snippet of code. Navigate to the directory of your desired language and download the function file (it will be named DMail-function with the file extension of the language it is written in).
+For developers, we recommend the DMail functions as they can be integrated directly into your app with small snippet of code. Navigate to the directory of your desired language then to "Function" and download the function file (it will be named DMail-function with the file extension of the language it is written in).
 
 ## Features
 * Send email without an SMTP server
