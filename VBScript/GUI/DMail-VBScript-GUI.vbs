@@ -1,20 +1,20 @@
-recipient = InputBox("To", "DMail (VBScript)") 'To
+recipients = Split(InputBox("To", "DMail (VBScript)"), ",") 'To
 Set re = New RegExp
 With re
 	.Pattern = "([-!#-'*+/-9=?A-Z^-~]+(\.[-!#-'*+/-9=?A-Z^-~]+)*|""([]!#-[^-~ \t]|(\\[\t -~]))+"")@([-!#-'*+/-9=?A-Z^-~]+(\.[-!#-'*+/-9=?A-Z^-~]+)*|\[[\t -Z^-~]*])"
 End With
 Do Until success = True
-	If re.Test(recipient) = True Then
+	If re.Test(Join(recipients, ",")) = True Then
 		success = True
 	Else
-		If IsEmpty(recipient) Then
+		If IsEmpty(recipients) Then
 			button = MsgBox("""To"" is required.", vbCritical + vbAbortRetryIgnore + vbDefaultButton2 + vbSystemModal, "DMail (VBScript)")
 			Select Case button
 			Case vbAbort
 				WScript.Quit
 			Case vbRetry
 				success = False
-				recipient = InputBox("To", "DMail (VBScript)")
+				recipients = Split(InputBox("To", "DMail (VBScript)"), ",")
 			Case vbIgnore
 				button = MsgBox("Are you sure you want to ignore this error? Ignoring may cause unexpected problems.", vbExclamation + vbYesNo + vbDefaultButton2 + vbSystemModal, "DMail (VBScript)")
 				Select Case button
@@ -25,13 +25,13 @@ Do Until success = True
 				End Select
 			End Select
 		Else
-			button = MsgBox("""" & recipient & """ is not a valid email address.", vbCritical + vbAbortRetryIgnore + vbDefaultButton2 + vbSystemModal, "DMail (VBScript)")
+			button = MsgBox("""" & Join(recipients) & """ is not a valid email address.", vbCritical + vbAbortRetryIgnore + vbDefaultButton2 + vbSystemModal, "DMail (VBScript)")
 			Select Case button
 			Case vbAbort
 				WScript.Quit
 			Case vbRetry
 				success = False
-				recipient = InputBox("To", "DMail (VBScript)", recipient)
+				recipients = Split(InputBox("To", "DMail (VBScript)", Join(recipients)), ",")
 			Case vbIgnore
 				button = MsgBox("Are you sure you want to ignore this error? Ignoring may cause unexpected problems.", vbExclamation + vbYesNo + vbDefaultButton2 + vbSystemModal, "DMail (VBScript)")
 				Select Case button
@@ -88,20 +88,26 @@ Do Until success = True
 		End If
 	End If
 Loop
+
+subject = InputBox("Subject (optional)", "DMail (VBScript)") 'Subject
+
+body = InputBox("Body (optional)", "DMail (VBScript)") 'Body
+
+customSMTP = InputBox("SMTP Server (optional)", "DMail (VBScript)") 'Custom SMTP Server
+
 success = False		
 Set re = Nothing
 
+For Each recipient In recipients 
 Set mail = CreateObject("CDO.Message")
 
 mail.To = recipient
 
 mail.From = From
 
-mail.Subject = InputBox("Subject (optional)", "DMail (VBScript)") 'Subject
+mail.Subject = subject
 
-mail.TextBody = InputBox("Body (optional)", "DMail (VBScript)") 'Body
-
-customSMTP = InputBox("SMTP Server (optional)", "DMail (VBScript)") 'Custom SMTP Server
+mail.TextBody = body
 
 If customSMTP = "" Then
 	mail.Configuration.Fields.Item ("http://schemas.microsoft.com/cdo/configuration/sendusing") = 2
@@ -195,7 +201,7 @@ If customSMTP = "" Then
 	Loop
 	success = False
 	
-	MsgBox "Email sent successfully.", vbInformation + vbOKOnly, "DMail (VBScript)"
+	MsgBox "Email sent successfully """ & recipient & """.", vbInformation + vbOKOnly, "DMail (VBScript)"
 Else
 	On Error Resume Next
 	Set Email = CreateObject("CDO.Message")
@@ -254,5 +260,6 @@ Else
 	Loop
 	success = False
 	
-	MsgBox "Email sent successfully.", vbInformation + vbOKOnly, "DMail (VBScript)"
+	MsgBox "Email sent successfully to """ & recipient & """.", vbInformation + vbOKOnly, "DMail (VBScript)"
 End If
+Next
