@@ -1,4 +1,4 @@
- Set oWSH = CreateObject("WScript.Shell")
+ Set oShell = CreateObject("WScript.Shell")
  vbsInterpreter = "cscript.exe"
 
  Call ForceConsole()
@@ -27,7 +27,7 @@
 
  Function ForceConsole()
     If InStr(LCase(WScript.FullName), vbsInterpreter) = 0 Then
-        oWSH.Run vbsInterpreter & " //NoLogo " & Chr(34) & WScript.ScriptFullName & Chr(34)
+        oShell.Run vbsInterpreter & " //NoLogo " & Chr(34) & WScript.ScriptFullName & Chr(34)
         WScript.Quit
     End If
  End Function
@@ -42,22 +42,30 @@ printf "DMail (VBScript) CLI [https://github.com/gyware/dmail]"
 printf "Copyright (C) GyWare. All rights reserved."
 printf ""
 
-Set mail = CreateObject("CDO.Message")
-
-printl "To: " 'To
-mail.To = scanf
+printl "To (separate multiple addresses with commas): " 'To
+recipients =  scanf
 
 printl "From: " 'From
-mail.From = scanf
+from = scanf
 
 printl "Subject (optional): " 'Subject
-mail.Subject = scanf
+subject = scanf
 
 printl "Body (optional): " 'Body
-mail.TextBody = scanf
+body = scanf
 
 printl "SMTP Server (optional): " 'Custom SMTP Server
 customSMTP = scanf
+
+Set mail = CreateObject("CDO.Message")
+
+mail.To = recipients
+
+mail.From = from
+
+mail.Subject = subject
+
+mail.TextBody = body
 
 If customSMTP = "" Then
 	mail.Configuration.Fields.Item ("http://schemas.microsoft.com/cdo/configuration/sendusing") = 2
@@ -95,13 +103,13 @@ If customSMTP = "" Then
 			exitc
 		End If
 	
-	printf "Email sent successfully."
+	printf "Email sent successfully to """ & recipients & """."
 	exitc
 Else
 	On Error Resume Next
 	Set Email = CreateObject("CDO.Message")
 	
-	mail.To = recipient
+	mail.To = recipients
 	
 	mail.From = from
 	
@@ -125,6 +133,6 @@ Else
 			exitc
 		End If
 	
-	printf "Email sent successfully."
+	printf "Email sent successfully to """ & recipients & """."
 	exitc
 End If
