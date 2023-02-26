@@ -1,3 +1,3 @@
 # DMail (Visual Basic .NET)
-Compatible with:
+## Compatible with:
 * Any OS with .NET installed
