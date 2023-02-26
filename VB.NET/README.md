@@ -1,1 +1,1 @@
-# DMail (VB.NET)
+# DMail (Visual Basic .NET)
