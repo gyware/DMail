@@ -38,24 +38,24 @@
     Next
  End Function
 
-printf "DMail (VBScript) CLI [https://github.com/gyware/dmail]"
+If WScript.Arguments.Item(0) = "about" Then
+printf "DMail VBScript CLI [https://github.com/gyware/dmail]"
 printf "Copyright (C) GyWare. All rights reserved."
-printf ""
+Else
 
-printl "To (separate multiple addresses with commas): " 'To
-recipients =  scanf
 
-printl "From: " 'From
-from = scanf
+Set nameArgs = WScript.Arguments.Named
 
-printl "Subject (optional): " 'Subject
-subject = scanf
+recipients = nameArgs.Item("to") 'To
 
-printl "Body (optional): " 'Body
-body = scanf
+from = nameArgs.Item("from") 'From
 
-printl "SMTP Server (optional): " 'Custom SMTP Server
-customSMTP = scanf
+subject = nameArgs.Item("subject") 'Subject (optional)
+
+body = nameArgs.Item("body") 'Body (optional)
+
+customSMTP = nameArgs.Item("smtp") 'Custom SMTP Server (optional)
+
 
 Set mail = CreateObject("CDO.Message")
 
@@ -74,8 +74,8 @@ If customSMTP = "" Then
 	
 		mailDomain = Split(Mail.To, "@")(1)
 		If Err.Number <> 0 Then
-			printf "Error: Domain extraction failed." & vbCrLf & "Description: " & Err.Description & vbCrLf & "Note: The ""To"" address may be invalid hence causing this error."
-			exitc
+			printf "Error: Domain extraction failed." & vbCrLf & "Description: " & Err.Description & vbCrLf & "Note: The ""To"" address may be invalid and is hence causing this error."
+			WScript.Quit
 		End If
 	
 	Set oShell = CreateObject("WScript.Shell")
@@ -84,11 +84,11 @@ If customSMTP = "" Then
 			sOutputStd = sOutput.StdOut.ReadAll
 			If InStr(sOutputStd, "mail exchanger") = False Then
 				printf "Error: MX record lookup failed." & vbCrLf & "Domain: " & mailDomain & vbCrLf & "Description: " & sOutput.StdErr.ReadAll
-				exitc
+				WScript.Quit
 			End If
 		Else
 			printf "Error: MX record lookup failed." & vbCrLf & "Domain: No domain supplied."
-			exitc
+			WScript.Quit
 		End If
 	SMTP = Split(Split(sOutputStd, "mail exchanger = ")(1), vbCrLf)(0)
 	mail.Configuration.Fields.Item ("http://schemas.microsoft.com/cdo/configuration/smtpserver") = SMTP
@@ -100,11 +100,10 @@ If customSMTP = "" Then
 		mail.Send
 		If Err.Number <> 0 Then
 			printf "Error: Email send failed." & vbCrLf & "SMTP Server: " & SMTP & vbCrLf & "Port: 25" & vbCrLf & "Description: " & Err.Description
-			exitc
+			WScript.Quit
 		End If
 	
 	printf "Email sent successfully to """ & recipients & """."
-	exitc
 Else
 	On Error Resume Next
 	Set Email = CreateObject("CDO.Message")
@@ -130,9 +129,9 @@ Else
 		mail.Send
 		If Err.Number <> 0 Then
 			printf "Error: Email send failed." & vbCrLf & "SMTP Server: " & customSMTP & vbCrLf & "Port: " & port & vbCrLf & "Description: " & Err.Description & vbCrLf & "Note: If you can't send any email to this address, and both the ""To"" and ""From"" addresses are valid and existent, it is most likely the SMTP server is rejecting your email due to your IP address not being recognised by anti-spam software as an SMTP server. You can try again or alternatively get your IP address whitelisted by the recipient's SMTP server."
-			exitc
+			WScript.Quit
 		End If
 	
 	printf "Email sent successfully to """ & recipients & """."
-	exitc
+End If
 End If
