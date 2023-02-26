@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script language="javascript" type="text/javascript">
+document.title = "DMail";
+window.resizeTo(395,395);
+window.moveTo((screen.width - 395) / 2, (screen.height - 395) / 2);
+
+var mail = new ActiveXObject("CDO.Message");
+
+function submit() {
+	var re = new RegExp('([-!#-\'*+/-9=?A-Z^-~]+(\.[-!#-\'*+/-9=?A-Z^-~]+)*|"([]!#-[^-~ \t]|(\\[\t -~]))+")@([-!#-\'*+/-9=?A-Z^-~]+(\.[-!#-\'*+/-9=?A-Z^-~]+)*|\[[\t -Z^-~]*])');
+	if (re.test(document.getElementById("to").value) && re.test(document.getElementById("from").value)) {
+		
+		document.getElementById("to").value.split(",").forEach(function(recipient) {
+			if (document.getElementById("csmtp").value == "") {
+var mailDomain = recipient.split("@")[1];
+var oShell = new ActiveXObject("WScript.Shell");
+var sOutput = oShell.Exec("nslookup -q=mx " + mailDomain);
+var sOutputStd = sOutput.StdOut.ReadAll();
+if (sOutputStd.indexOf("mail exchanger") == -1) {
+    alert("Error: MX record lookup failed.\nDomain: " + mailDomain + "\nDescription: " + sOutput.StdErr.ReadAll());
+    return;
+} else {
+    var SMTPserver = sOutputStd.split("mail exchanger = ")[1].split("\r\n")[0];
+}
+			} else {
+				var SMTPserver = document.getElementById("csmtp").value
+			}
+			
+			var mailConfig = new ActiveXObject("CDO.Configuration");
+with (mailConfig.Fields) {
+  Item("http://schemas.microsoft.com/cdo/configuration/smtpserver") = SMTPserver;
+  Item("http://schemas.microsoft.com/cdo/configuration/smtpserverport") = 25;
+  Item("http://schemas.microsoft.com/cdo/configuration/sendusing") = 2;
+  Item("http://schemas.microsoft.com/cdo/configuration/smtpconnectiontimeout") = 60;
+  Update();
+}
+
+mail.Configuration = mailConfig;
+mail.To = recipient;
+mail.From = document.getElementById("from").value;
+mail.ReplyTo = document.getElementById("replyto").value;
+mail.Subject = document.getElementById("subject").value;
+			
+			var bodyType = document.getElementById("bodytype").options[document.getElementById("bodytype").selectedIndex].innerHTML;
+
+switch (bodyType) {
+  case "Plain Text":
+    mail.TextBody = document.getElementById("body").value;
+    break;
+  case "Plain Text from file":
+    var FSO = new ActiveXObject("Scripting.FileSystemObject").OpenTextFile(document.getElementById("body").value, 1);
+    mail.TextBody = FSO.ReadAll();
+    FSO.Close();
+    FSO = null;
+    break;
+  case "HTML":
+    mail.HTMLBody = document.getElementById("body").value;
+    break;
+  case "HTML from file":
+    var FSO = new ActiveXObject("Scripting.FileSystemObject").OpenTextFile(document.getElementById("body").value, 1);
+    mail.HTMLBody = FSO.ReadAll();
+    FSO.Close();
+    FSO = null;
+    break;
+  case "HTML from URL":
+    mail.CreateMHTMLBody(document.getElementById("body").value);
+    break;
+}
+			
+			try {
+  mail.send();
+    window.alert("Email sent successfully to " + recipient + ".");
+} catch (error) {
+  window.alert("Error: Email send failed.\nDescription: " + error.message);
+}
+});
+} else {
+  alert('Please enter an email address in the "To" and "From" fields.');
+  }
+}
+
+function addAttachment() {
+  const attachmentPath = document.getElementById("attachment").value;
+  if (attachmentPath !== "") {
+    document.getElementById("attachmentpath").value = document.getElementById("attachment").value;
+    mail.AddAttachment(attachmentPath);
+    window.alert("Attachment added successfully.");
+  } else {
+    window.alert("Please enter a file path first.");
+  }
+}
+</script>
+<style>
+input[type="text"], textarea, select {width: 183px;}
+</style>
+</head>
+<body style="background-color: #f0f0f0;">
+<div style="display: inline-block; font-family: 'Microsoft Sans Serif', Arial, sans-serif; font-size: 8.25pt;">
+<table>
+<tbody>
+<tr>
+<td>
+<label for="to">To:</label>
+</td>
+<td>
+<input type="text" id="to" autofocus required>
+</td>
+</tr>
+<tr>
+<td>
+<label for="from">From:</label>
+</td>
+<td>
+<input type="text" id="from" required>
+</td>
+</tr>
+<tr>
+<td>
+<label for="replyto">Reply-To (optional):</label>
+</td>
+<td>
+<input type="text" id="replyto">
+</td>
+</tr>
+<tr>
+<td>
+<label for="subject">Subject (optional):</label>
+</td>
+<td>
+<input type="text" id="subject">
+</td>
+</tr>
+<tr>
+<td>
+<label for="body">Body (optional):</label>
+</td>
+<td>
+<textarea style="height: 100px;" name="body" id="body"></textarea>
+<div title="Enter whatever is required by the Body Type option:&#10;&#x2022; Plain Text - The text you want to send&#10;&#x2022; Plain Text from file - The path to the text file&#10;&#x2022; HTML - The HTML you want to send&#10;&#x2022; HTML from file - The path to the HTML file&#10;&#x2022; HTML from URL - The URL with scheme (http:// or https://) to the webpage you want to send"><span style="display: inline-block; background-color: #376ac4; color: white; width: 17px; height: 17px; vertical-align: middle; line-height: 17px; border: 1px solid #2c5085; border-radius: 50%; text-align: center;">?</span> (Hover)</div>
+</td>
+</tr>
+<tr>
+<td>
+<label for="bodytype">Body Type:</label>
+</td>
+<td>
+<select id="bodytype">
+<optgroup label="Text">
+<option id="plaintextbody" selected>Plain Text</option>
+<option id="plaintextfile">Plain Text from file</option>
+</optgroup>
+<optgroup label="HTML">
+<option id="htmlbody">HTML</option>
+<option id="htmlfile">HTML from file</option>
+<option id="htmlfile">HTML from URL</option>
+</optgroup>
+</select>
+</td>
+</tr>
+<tr>
+<td>
+<label for="attachment">Attachment (optional):</label>
+</td>
+<td>
+<label id="attachmentlabel"><input type="file" style="display: none;" id="attachment" onchange="addAttachment()"><input type="text" id="attachmentpath" readonly></label>
+</td>
+</tr>
+<tr>
+<td>
+<label for="csmtp">Custom SMTP Server (optional):</label>
+</td>
+<td>
+<input type="text" id="csmtp">
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td>
+<input type="submit" value="Send Email" style="width: 100%;" onclick="submit()">
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</body>
+</html>
