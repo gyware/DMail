@@ -1,6 +1,6 @@
 # DMail
 
-[![AppVeyor](https://img.shields.io/badge/Licence-MIT-orange)](LICENSE)
+[![AppVeyor](https://img.shields.io/badge/License-MIT-orange)](LICENSE)
 [![AppVeyor](https://img.shields.io/badge/Version-v0.1-informational)](https://github.com/gyware/DMail)
 ![AppVeyor](https://img.shields.io/badge/Development-In_Progress-lightgreen)
 
