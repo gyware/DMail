@@ -5,7 +5,7 @@
 
 A simple way to send email without an SMTP server.
 
-## For Users
+## For Regular Users
 If you are just a regular Windows user who wants to use DMail, it is recommended you download or run the [DMail HTA GUI](/HTA/GUI/). You can run other GUIs, but the HTA GUI is the most complete.
 
 ## For Advanced Users
